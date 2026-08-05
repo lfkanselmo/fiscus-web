@@ -1,6 +1,7 @@
 .app-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 16px 24px;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
@@ -21,6 +22,26 @@
     font-size: 18px;
     letter-spacing: -0.01em;
     color: var(--ink);
+  }
+}
+
+nav {
+  display: flex;
+  gap: 24px;
+
+  a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-2);
+    text-decoration: none;
+
+    &.active {
+      color: var(--brand);
+    }
+
+    &:hover {
+      color: var(--ink);
+    }
   }
 }
 

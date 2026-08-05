@@ -1,0 +1,51 @@
+<section class="page">
+  <h1>Transacciones</h1>
+
+  <mat-form-field appearance="outline" class="filter">
+    <mat-label>Categoría</mat-label>
+    <mat-select [(ngModel)]="categoryFilter" (ngModelChange)="onFilterChange()">
+      <mat-option value="">Todas</mat-option>
+      @for (category of categories(); track category.id) {
+        <mat-option [value]="category.id">{{ category.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <table class="txn">
+    <thead>
+      <tr>
+        <th>Comercio</th>
+        <th>Categoría</th>
+        <th>Fecha</th>
+        <th class="num">Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (transaction of transactions(); track transaction.id) {
+        <tr>
+          <td class="merchant">{{ transaction.merchant }}</td>
+          <td>
+            <mat-form-field appearance="outline" class="recategorize">
+              <mat-select
+                [ngModel]="transaction.category_id"
+                (ngModelChange)="recategorize(transaction, $event)"
+              >
+                @for (category of categories(); track category.id) {
+                  <mat-option [value]="category.id">
+                    <app-category-badge [category]="category" />
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </td>
+          <td class="date mono">{{ transaction.occurred_at | date: 'dd MMM' }}</td>
+          <td class="num mono">{{ transaction.amount_cents | centsCurrency }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (!transactions().length) {
+    <p class="empty">Todavía no hay transacciones. Importa un extracto para comenzar.</p>
+  }
+</section>

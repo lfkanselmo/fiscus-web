@@ -1,0 +1,36 @@
+<section class="page">
+  <h1>Importar extracto</h1>
+  <p class="hint">
+    Sube un CSV o PDF de tu banco con las columnas fecha, comercio, monto y descripción.
+  </p>
+
+  <input type="file" accept=".csv,.pdf" (change)="onFileSelected($event)" />
+  <button mat-flat-button [disabled]="!selectedFile() || uploading()" (click)="upload()">
+    {{ uploading() ? 'Importando…' : 'Importar' }}
+  </button>
+
+  @if (summary(); as result) {
+    <div class="summary">
+      <div class="tile">
+        <span class="k">Creadas</span>
+        <span class="v mono">{{ result.created }}</span>
+      </div>
+      <div class="tile">
+        <span class="k">Duplicadas</span>
+        <span class="v mono">{{ result.duplicated }}</span>
+      </div>
+      <div class="tile">
+        <span class="k">Filas inválidas</span>
+        <span class="v mono">{{ result.error_count }}</span>
+      </div>
+    </div>
+
+    @if (result.errors.length) {
+      <ul class="errors">
+        @for (error of result.errors; track error) {
+          <li>{{ error }}</li>
+        }
+      </ul>
+    }
+  }
+</section>

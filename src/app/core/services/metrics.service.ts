@@ -1,0 +1,17 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { API_BASE_URL } from '../config/api.config';
+import { MonthlyCategoryMetric } from '../models/monthly-metric.model';
+
+@Injectable({ providedIn: 'root' })
+export class MetricsService {
+  private readonly http = inject(HttpClient);
+
+  monthly(year: number, month: number): Observable<MonthlyCategoryMetric[]> {
+    return this.http.get<MonthlyCategoryMetric[]>(`${API_BASE_URL}/metrics/monthly`, {
+      params: { year, month },
+    });
+  }
+}

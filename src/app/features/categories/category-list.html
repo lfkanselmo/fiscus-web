@@ -1,0 +1,24 @@
+<section class="page">
+  <h1>Categorías</h1>
+
+  <div class="badge-row">
+    @for (category of categories(); track category.id) {
+      <app-category-badge [category]="category" />
+    }
+  </div>
+
+  <form class="create-form" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <input class="color-input" type="color" formControlName="color_hex" />
+
+    <button mat-flat-button type="submit" [disabled]="form.invalid">Crear categoría</button>
+  </form>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+</section>

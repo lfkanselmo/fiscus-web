@@ -1,0 +1,36 @@
+.page {
+  max-width: 720px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0 0 20px;
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.create-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.color-input {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
+  background: var(--surface);
+}
+
+.error {
+  color: var(--critical);
+  font-size: 13px;
+  margin-top: 12px;
+}

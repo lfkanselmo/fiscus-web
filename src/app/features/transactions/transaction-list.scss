@@ -1,0 +1,55 @@
+.page {
+  max-width: 960px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0 0 20px;
+}
+
+.filter {
+  width: 220px;
+  margin-bottom: 16px;
+}
+
+table.txn {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.txn th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  font-weight: 600;
+  padding: 0 12px 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+table.txn th.num,
+table.txn td.num {
+  text-align: right;
+}
+
+table.txn td {
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.merchant {
+  font-weight: 600;
+}
+
+.recategorize {
+  width: 220px;
+}
+
+.empty {
+  color: var(--ink-muted);
+  font-size: 14px;
+  margin-top: 24px;
+}
