@@ -1,0 +1,157 @@
+@use '@angular/material' as mat;
+
+:root {
+  --page: #F1F4EF;
+  --surface: #FBFCFA;
+  --surface-2: #FFFFFF;
+  --ink: #10160F;
+  --ink-2: #4B5245;
+  --ink-muted: #868C7F;
+  --border: rgba(16, 22, 15, 0.12);
+  --border-strong: rgba(16, 22, 15, 0.20);
+  --brand: #2F5744;
+  --brand-strong: #1F3F30;
+  --brand-soft: #E4ECE3;
+  --accent: #C98A3E;
+  --accent-text: #8F5B22;
+  --accent-soft: #F3E6D2;
+  --good: #0CA30C;
+  --warning: #FAB219;
+  --serious: #EC835A;
+  --critical: #D03B3B;
+  --cat-1: #2A78D6;
+  --cat-2: #EB6834;
+  --cat-3: #1BAF7A;
+  --cat-4: #EDA100;
+  --cat-5: #E87BA4;
+  --cat-6: #008300;
+  --cat-7: #4A3AA7;
+  --cat-8: #E34948;
+}
+
+:root[data-theme='dark'],
+:root:where(:not([data-theme='light'])) {
+  @media (prefers-color-scheme: dark) {
+    --page: #0D120C;
+    --surface: #141B12;
+    --surface-2: #182019;
+    --ink: #F4F6F2;
+    --ink-2: #C3CABD;
+    --ink-muted: #8B9284;
+    --border: rgba(244, 246, 242, 0.12);
+    --border-strong: rgba(244, 246, 242, 0.22);
+    --brand: #6FA689;
+    --brand-strong: #8FC0A4;
+    --brand-soft: #1C2B22;
+    --accent: #E0A855;
+    --accent-text: #E0A855;
+    --accent-soft: #2A2013;
+    --cat-1: #3987E5;
+    --cat-2: #D95926;
+    --cat-3: #199E70;
+    --cat-4: #C98500;
+    --cat-5: #D55181;
+    --cat-6: #008300;
+    --cat-7: #9085E9;
+    --cat-8: #E66767;
+  }
+}
+:root[data-theme='dark'] {
+  --page: #0D120C;
+  --surface: #141B12;
+  --surface-2: #182019;
+  --ink: #F4F6F2;
+  --ink-2: #C3CABD;
+  --ink-muted: #8B9284;
+  --border: rgba(244, 246, 242, 0.12);
+  --border-strong: rgba(244, 246, 242, 0.22);
+  --brand: #6FA689;
+  --brand-strong: #8FC0A4;
+  --brand-soft: #1C2B22;
+  --accent: #E0A855;
+  --accent-text: #E0A855;
+  --accent-soft: #2A2013;
+  --cat-1: #3987E5;
+  --cat-2: #D95926;
+  --cat-3: #199E70;
+  --cat-4: #C98500;
+  --cat-5: #D55181;
+  --cat-6: #008300;
+  --cat-7: #9085E9;
+  --cat-8: #E66767;
+}
+
+html {
+  height: 100%;
+  @include mat.theme((
+    color: (
+      primary: mat.$green-palette,
+      tertiary: mat.$orange-palette,
+    ),
+    typography: (
+      plain-family: 'Manrope',
+      brand-family: 'Manrope',
+    ),
+    density: 0,
+  ));
+
+  // El sistema de color de marca de Fiscus reemplaza al M3 generado por paleta:
+  // la paleta anterior solo aporta el comportamiento estructural de Material
+  // (estados, elevación); el color visible sale de nuestros tokens.
+  --mat-sys-primary: var(--brand);
+  --mat-sys-on-primary: var(--surface);
+  --mat-sys-primary-container: var(--brand-soft);
+  --mat-sys-on-primary-container: var(--brand-strong);
+  --mat-sys-inverse-primary: var(--brand-strong);
+
+  --mat-sys-secondary: var(--ink-2);
+  --mat-sys-on-secondary: var(--surface);
+  --mat-sys-secondary-container: var(--surface-2);
+  --mat-sys-on-secondary-container: var(--ink);
+
+  --mat-sys-tertiary: var(--accent);
+  --mat-sys-on-tertiary: var(--ink);
+  --mat-sys-tertiary-container: var(--accent-soft);
+  --mat-sys-on-tertiary-container: var(--accent-text);
+
+  --mat-sys-error: var(--critical);
+  --mat-sys-on-error: var(--surface);
+  --mat-sys-error-container: color-mix(in oklab, var(--critical) 16%, var(--surface));
+  --mat-sys-on-error-container: var(--critical);
+
+  --mat-sys-surface: var(--surface);
+  --mat-sys-on-surface: var(--ink);
+  --mat-sys-surface-variant: var(--border);
+  --mat-sys-on-surface-variant: var(--ink-2);
+  --mat-sys-background: var(--page);
+  --mat-sys-on-background: var(--ink);
+
+  --mat-sys-surface-dim: var(--page);
+  --mat-sys-surface-bright: var(--surface-2);
+  --mat-sys-surface-container-lowest: var(--surface-2);
+  --mat-sys-surface-container-low: var(--page);
+  --mat-sys-surface-container: var(--surface);
+  --mat-sys-surface-container-high: var(--surface-2);
+  --mat-sys-surface-container-highest: var(--surface-2);
+
+  --mat-sys-outline: var(--border-strong);
+  --mat-sys-outline-variant: var(--border);
+  --mat-sys-inverse-surface: var(--ink);
+  --mat-sys-inverse-on-surface: var(--page);
+  --mat-sys-scrim: rgba(0, 0, 0, 0.4);
+  --mat-sys-shadow: rgba(0, 0, 0, 0.3);
+}
+
+body {
+  color-scheme: light dark;
+  background-color: var(--page);
+  color: var(--ink);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
