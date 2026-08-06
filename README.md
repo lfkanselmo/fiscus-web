@@ -60,6 +60,18 @@ Vitest (test runner por defecto de Angular 21, reemplaza a Karma). Además de lo
 componentes, `core/utils` tiene tests unitarios puros (`color.spec.ts`, `month-value.spec.ts`) que no
 requieren TestBed.
 
+### E2E
+
+```bash
+npm run e2e
+```
+
+Playwright, contra navegador Chromium. Requiere `fiscus-api` (puerto 8000) y `fiscus-web`
+(`npm start`, puerto 4200) ya corriendo — el config no orquesta los servidores automáticamente, solo
+dirige el navegador contra lo que ya esté levantado. Los specs (`e2e/*.spec.ts`) generan sus propios
+datos únicos por corrida (nombres con timestamp) en vez de asumir una base de datos vacía, así
+conviven con lo que ya haya en la base de datos de desarrollo.
+
 ---
 
 ## Estructura del proyecto
@@ -144,8 +156,7 @@ Angular 21 (standalone, signals) · RxJS · echarts / ngx-echarts · Vitest · T
 
 ---
 
-## Pendiente (roadmap)
+## Roadmap
 
-- **S8**: estados vacíos/carga más pulidos, hardening general.
-
-Detalle completo en [`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
+MVP completo (S0–S8). Detalle completo en
+[`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
