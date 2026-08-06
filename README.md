@@ -15,8 +15,10 @@ bancarios, listar y recategorizar transacciones, gestionar categorías y ver mé
 
 ## Configuración
 
-La URL base de la API está en `src/app/core/config/api.config.ts`. Sin variables de entorno ni
-`fileReplacements` — es un único valor de configuración, no justifica esa infraestructura todavía.
+La URL base de la API sale de `src/environments/environment.ts` (dev) / `environment.prod.ts`
+(producción, vía `fileReplacements` en `angular.json`). En Docker, `environment.prod.ts` se genera en
+build time a partir del build arg `API_BASE_URL` (ver más abajo) — no hace falta tocar código para
+apuntar a otra API.
 
 ---
 
@@ -35,7 +37,18 @@ La app queda disponible en `http://localhost:4200`.
 npm run build
 ```
 
-Genera el build de producción en `dist/fiscus-web`.
+Genera el build de producción en `dist/fiscus-web/browser`.
+
+## Docker
+
+```bash
+docker build -t fiscus-web -f docker/Dockerfile --build-arg API_BASE_URL=http://localhost:8000/api/v1 .
+docker run -p 4200:80 fiscus-web
+```
+
+Build multi-stage: Node compila el bundle de producción, Nginx sirve los archivos estáticos con
+fallback a `index.html` para las rutas del router. Para el stack completo (API + SPA) ver
+[`docker-compose.yml`](../docker-compose.yml) en la raíz de `fiscus/`.
 
 ## Tests
 
@@ -133,7 +146,6 @@ Angular 21 (standalone, signals) · RxJS · echarts / ngx-echarts · Vitest · T
 
 ## Pendiente (roadmap)
 
-- **S7**: `Dockerfile` (Nginx sobre el build de producción).
 - **S8**: estados vacíos/carga más pulidos, hardening general.
 
 Detalle completo en [`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
