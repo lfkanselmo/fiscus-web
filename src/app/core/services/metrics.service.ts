@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { API_BASE_URL } from '../config/api.config';
 import { MonthlyCategoryMetric } from '../models/monthly-metric.model';
+import { MonthlyTrendPoint } from '../models/monthly-trend.model';
 
 @Injectable({ providedIn: 'root' })
 export class MetricsService {
@@ -12,6 +13,12 @@ export class MetricsService {
   monthly(year: number, month: number): Observable<MonthlyCategoryMetric[]> {
     return this.http.get<MonthlyCategoryMetric[]>(`${API_BASE_URL}/metrics/monthly`, {
       params: { year, month },
+    });
+  }
+
+  trend(months: number): Observable<MonthlyTrendPoint[]> {
+    return this.http.get<MonthlyTrendPoint[]>(`${API_BASE_URL}/metrics/trend`, {
+      params: { months },
     });
   }
 }

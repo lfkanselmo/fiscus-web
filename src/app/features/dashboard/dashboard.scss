@@ -1,0 +1,48 @@
+.page {
+  max-width: 880px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-muted);
+  margin: 0 0 16px;
+}
+
+.chart {
+  width: 100%;
+}
+
+.chart-category {
+  height: 280px;
+}
+
+.chart-trend {
+  height: 240px;
+}
+
+.empty {
+  color: var(--ink-muted);
+  font-size: 14px;
+  margin: 0;
+}

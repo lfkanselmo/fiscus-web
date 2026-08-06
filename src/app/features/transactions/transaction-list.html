@@ -1,15 +1,13 @@
 <section class="page">
   <h1>Transacciones</h1>
 
-  <mat-form-field appearance="outline" class="filter">
-    <mat-label>Categoría</mat-label>
-    <mat-select [(ngModel)]="categoryFilter" (ngModelChange)="onFilterChange()">
-      <mat-option value="">Todas</mat-option>
-      @for (category of categories(); track category.id) {
-        <mat-option [value]="category.id">{{ category.name }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+  <div class="filter">
+    <app-select-field
+      [options]="filterOptions()"
+      [value]="categoryFilter()"
+      (valueChange)="onFilterChange($event)"
+    />
+  </div>
 
   <table class="txn">
     <thead>
@@ -24,19 +22,12 @@
       @for (transaction of transactions(); track transaction.id) {
         <tr>
           <td class="merchant">{{ transaction.merchant }}</td>
-          <td>
-            <mat-form-field appearance="outline" class="recategorize">
-              <mat-select
-                [ngModel]="transaction.category_id"
-                (ngModelChange)="recategorize(transaction, $event)"
-              >
-                @for (category of categories(); track category.id) {
-                  <mat-option [value]="category.id">
-                    <app-category-badge [category]="category" />
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+          <td class="recategorize">
+            <app-select-field
+              [options]="categoryOptions()"
+              [value]="transaction.category_id"
+              (valueChange)="recategorize(transaction, $event)"
+            />
           </td>
           <td class="date mono">{{ transaction.occurred_at | date: 'dd MMM' }}</td>
           <td class="num mono">{{ transaction.amount_cents | centsCurrency }}</td>

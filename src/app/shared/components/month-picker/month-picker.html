@@ -1,0 +1,86 @@
+<div class="month-picker">
+  <div class="month-stepper">
+    <button class="step-btn" type="button" (click)="shiftMonth(-1)" aria-label="Mes anterior">
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path
+          d="M10 3 6 8l4 5"
+          stroke="currentColor"
+          stroke-width="1.6"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <button class="month-label" type="button" (click)="togglePicker()">
+      {{ monthLabel() }}
+    </button>
+    <button class="step-btn" type="button" (click)="shiftMonth(1)" aria-label="Mes siguiente">
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path
+          d="m6 3 4 5-4 5"
+          stroke="currentColor"
+          stroke-width="1.6"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </div>
+
+  @if (pickerOpen()) {
+    <div class="picker-backdrop" (click)="closePicker()"></div>
+    <div class="picker-panel">
+      <div class="picker-year">
+        <button
+          class="step-btn"
+          type="button"
+          (click)="shiftPickerYear(-1)"
+          aria-label="Año anterior"
+        >
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path
+              d="M10 3 6 8l4 5"
+              stroke="currentColor"
+              stroke-width="1.6"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <span class="mono">{{ pickerYear() }}</span>
+        <button
+          class="step-btn"
+          type="button"
+          (click)="shiftPickerYear(1)"
+          aria-label="Año siguiente"
+        >
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path
+              d="m6 3 4 5-4 5"
+              stroke="currentColor"
+              stroke-width="1.6"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="picker-grid">
+        @for (name of monthNames; track name; let i = $index) {
+          <button
+            class="picker-month"
+            type="button"
+            [class.selected]="isPickedMonth(i)"
+            (click)="pickMonth(i)"
+          >
+            {{ name }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

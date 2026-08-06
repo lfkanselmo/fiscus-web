@@ -1,12 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
 
 import { ImportsService } from '../../core/services/imports.service';
 import { ImportSummary } from '../../core/models/import-summary.model';
 
 @Component({
   selector: 'app-import-page',
-  imports: [MatButtonModule],
+  imports: [],
   templateUrl: './import-page.html',
   styleUrl: './import-page.scss',
 })

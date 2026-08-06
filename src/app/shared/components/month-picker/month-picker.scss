@@ -1,0 +1,118 @@
+:host {
+  display: inline-block;
+}
+
+.month-picker {
+  position: relative;
+}
+
+.month-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 4px;
+}
+
+.month-label {
+  appearance: none;
+  border: none;
+  background: transparent;
+  min-width: 140px;
+  text-align: center;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.month-label:hover {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.picker-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  width: 260px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.3);
+  padding: 12px;
+}
+
+.picker-year {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.picker-month {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.picker-month:hover {
+  background: var(--brand-soft);
+}
+
+.picker-month.selected {
+  background: var(--brand);
+  color: var(--surface);
+}
+
+.step-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--ink-muted);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.step-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.step-btn:hover {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.step-btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}

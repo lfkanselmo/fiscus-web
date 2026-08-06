@@ -1,26 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 
 import { CategoriesService } from '../../core/services/categories.service';
 import { TransactionsService } from '../../core/services/transactions.service';
 import { Category } from '../../core/models/category.model';
 import { Transaction } from '../../core/models/transaction.model';
-import { CategoryBadge } from '../../shared/components/category-badge/category-badge';
 import { CentsCurrencyPipe } from '../../shared/pipes/cents-currency.pipe';
+import { SelectField, SelectOption } from '../../shared/components/select-field/select-field';
 
 @Component({
   selector: 'app-transaction-list',
-  imports: [
-    FormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    CategoryBadge,
-    CentsCurrencyPipe,
-    DatePipe,
-  ],
+  imports: [CentsCurrencyPipe, DatePipe, SelectField],
   templateUrl: './transaction-list.html',
   styleUrl: './transaction-list.scss',
 })
@@ -32,13 +22,18 @@ export class TransactionList {
   readonly categories = signal<Category[]>([]);
   readonly categoryFilter = signal<string>('');
 
-  readonly categoryById = computed(() => {
-    const map = new Map<string, Category>();
-    for (const category of this.categories()) {
-      map.set(category.id, category);
-    }
-    return map;
-  });
+  readonly categoryOptions = computed<SelectOption[]>(() =>
+    this.categories().map((category) => ({
+      value: category.id,
+      label: category.name,
+      colorHex: category.color_hex,
+    })),
+  );
+
+  readonly filterOptions = computed<SelectOption[]>(() => [
+    { value: '', label: 'Todas las categorías' },
+    ...this.categoryOptions(),
+  ]);
 
   constructor() {
     this.categoriesService.list().subscribe((categories) => this.categories.set(categories));
@@ -51,7 +46,8 @@ export class TransactionList {
       .subscribe((transactions) => this.transactions.set(transactions));
   }
 
-  onFilterChange(): void {
+  onFilterChange(categoryId: string): void {
+    this.categoryFilter.set(categoryId);
     this.reload();
   }
 
