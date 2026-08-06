@@ -8,14 +8,16 @@
   </div>
 
   <form class="create-form" [formGroup]="form" (ngSubmit)="submit()">
-    <mat-form-field appearance="outline">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="name" />
-    </mat-form-field>
+    <label class="field">
+      <input formControlName="name" placeholder="Nombre de la categoría" />
+    </label>
 
-    <input class="color-input" type="color" formControlName="color_hex" />
+    <app-color-picker-field
+      [value]="form.controls.color_hex.value"
+      (valueChange)="setColor($event)"
+    />
 
-    <button mat-flat-button type="submit" [disabled]="form.invalid">Crear categoría</button>
+    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Crear categoría</button>
   </form>
 
   @if (errorMessage()) {

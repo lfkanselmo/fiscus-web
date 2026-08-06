@@ -1,0 +1,47 @@
+<div class="color-picker-field">
+  <button class="color-trigger" type="button" (click)="toggle()">
+    <span class="swatch-preview" [style.background]="value()"></span>
+    <span class="hex-label mono">{{ value().toUpperCase() }}</span>
+  </button>
+
+  @if (open()) {
+    <div class="picker-backdrop" (click)="close()"></div>
+    <div class="color-panel">
+      <div
+        #svPanel
+        class="sv-panel"
+        [style.background-color]="hueColor()"
+        (pointerdown)="startSvDrag($event)"
+      >
+        <div class="sv-cursor" [style.left.%]="hsv().s" [style.top.%]="100 - hsv().v"></div>
+      </div>
+
+      <div #hueSlider class="hue-slider" (pointerdown)="startHueDrag($event)">
+        <div class="hue-cursor" [style.left.%]="(hsv().h / 360) * 100"></div>
+      </div>
+
+      <div class="hex-row">
+        <span class="hex-prefix mono">#</span>
+        <input
+          class="hex-input mono"
+          [value]="hexDraft()"
+          (input)="onHexInput($event)"
+          maxlength="6"
+        />
+      </div>
+
+      <div class="swatch-picker">
+        @for (color of presets; track color) {
+          <button
+            class="swatch"
+            type="button"
+            [style.background]="color"
+            [class.selected]="value() === color"
+            [attr.aria-label]="'Color ' + color"
+            (click)="choosePreset(color)"
+          ></button>
+        }
+      </div>
+    </div>
+  }
+</div>

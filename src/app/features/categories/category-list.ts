@@ -1,22 +1,17 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 import { CategoriesService } from '../../core/services/categories.service';
 import { Category } from '../../core/models/category.model';
+import { CATEGORY_COLOR_PRESETS } from '../../core/constants/category-colors';
 import { CategoryBadge } from '../../shared/components/category-badge/category-badge';
+import { ColorPickerField } from '../../shared/components/color-picker-field/color-picker-field';
+
+const DEFAULT_COLOR: string = CATEGORY_COLOR_PRESETS[0];
 
 @Component({
   selector: 'app-category-list',
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    CategoryBadge,
-  ],
+  imports: [ReactiveFormsModule, CategoryBadge, ColorPickerField],
   templateUrl: './category-list.html',
   styleUrl: './category-list.scss',
 })
@@ -29,7 +24,7 @@ export class CategoryList {
 
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
-    color_hex: ['#2a78d6', Validators.required],
+    color_hex: [DEFAULT_COLOR, Validators.required],
   });
 
   constructor() {
@@ -47,10 +42,14 @@ export class CategoryList {
     this.errorMessage.set(null);
     this.categoriesService.create(this.form.getRawValue()).subscribe({
       next: () => {
-        this.form.reset({ name: '', color_hex: '#2a78d6' });
+        this.form.reset({ name: '', color_hex: DEFAULT_COLOR });
         this.reload();
       },
       error: () => this.errorMessage.set('Ya existe una categoría con ese nombre.'),
     });
+  }
+
+  setColor(hex: string): void {
+    this.form.controls.color_hex.setValue(hex);
   }
 }

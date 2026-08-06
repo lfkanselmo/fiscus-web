@@ -17,16 +17,7 @@ h1 {
 .create-form {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.color-input {
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 2px;
-  background: var(--surface);
+  gap: 16px;
 }
 
 .error {
