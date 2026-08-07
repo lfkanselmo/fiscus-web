@@ -5,7 +5,7 @@ import { Observable, tap } from 'rxjs';
 
 import { API_BASE_URL } from '../config/api.config';
 import { TOKEN_STORAGE_KEY } from '../constants/auth-storage';
-import { AuthCredentials, AuthTokenResponse } from '../models/auth.model';
+import { AuthCredentials, AuthTokenResponse, ForgotPasswordResponse } from '../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -26,6 +26,19 @@ export class AuthService {
     return this.http
       .post<AuthTokenResponse>(`${API_BASE_URL}/auth/register`, credentials)
       .pipe(tap((response) => this.setToken(response.access_token)));
+  }
+
+  requestPasswordReset(email: string): Observable<ForgotPasswordResponse> {
+    return this.http.post<ForgotPasswordResponse>(`${API_BASE_URL}/auth/forgot-password`, {
+      email,
+    });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(`${API_BASE_URL}/auth/reset-password`, {
+      token,
+      new_password: newPassword,
+    });
   }
 
   logout(): void {

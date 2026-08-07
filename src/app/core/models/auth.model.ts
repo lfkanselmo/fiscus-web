@@ -7,3 +7,7 @@ export interface AuthCredentials {
   email: string;
   password: string;
 }
+
+export interface ForgotPasswordResponse {
+  message: string;
+}
