@@ -5,6 +5,7 @@ import { CATEGORY_COLOR_PRESETS } from '../../core/constants/category-colors';
 import { UNCATEGORIZED_CATEGORY_ID } from '../../core/constants/sentinel-category';
 import { Category } from '../../core/models/category.model';
 import { CategoriesService } from '../../core/services/categories.service';
+import { centsToPesos, formatCents, pesosToCents } from '../../core/utils/currency';
 import { ColorPickerField } from '../../shared/components/color-picker-field/color-picker-field';
 import { CategoryRulesPanel } from './category-rules-panel/category-rules-panel';
 
@@ -28,9 +29,12 @@ export class CategoryList {
   readonly expandedCategoryId = signal<string | null>(null);
   readonly deleteConfirmId = signal<string | null>(null);
 
+  readonly formatCents = formatCents;
+
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
     color_hex: [DEFAULT_COLOR, Validators.required],
+    budget_pesos: [null as number | null],
   });
 
   constructor() {
@@ -46,7 +50,12 @@ export class CategoryList {
       return;
     }
     this.errorMessage.set(null);
-    const payload = this.form.getRawValue();
+    const raw = this.form.getRawValue();
+    const payload = {
+      name: raw.name,
+      color_hex: raw.color_hex,
+      monthly_budget_cents: raw.budget_pesos == null ? null : pesosToCents(raw.budget_pesos),
+    };
     const editingId = this.editingCategoryId();
     const request = editingId
       ? this.categoriesService.update(editingId, payload)
@@ -54,7 +63,7 @@ export class CategoryList {
 
     request.subscribe({
       next: () => {
-        this.form.reset({ name: '', color_hex: DEFAULT_COLOR });
+        this.form.reset({ name: '', color_hex: DEFAULT_COLOR, budget_pesos: null });
         this.editingCategoryId.set(null);
         this.reload();
       },
@@ -69,12 +78,17 @@ export class CategoryList {
   startEdit(category: Category): void {
     this.errorMessage.set(null);
     this.editingCategoryId.set(category.id);
-    this.form.setValue({ name: category.name, color_hex: category.color_hex });
+    this.form.setValue({
+      name: category.name,
+      color_hex: category.color_hex,
+      budget_pesos:
+        category.monthly_budget_cents == null ? null : centsToPesos(category.monthly_budget_cents),
+    });
   }
 
   cancelEdit(): void {
     this.editingCategoryId.set(null);
-    this.form.reset({ name: '', color_hex: DEFAULT_COLOR });
+    this.form.reset({ name: '', color_hex: DEFAULT_COLOR, budget_pesos: null });
   }
 
   toggleRules(categoryId: string): void {

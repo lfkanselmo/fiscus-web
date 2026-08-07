@@ -7,6 +7,9 @@
         <div class="category-row-header">
           <span class="dot" [style.background]="category.color_hex"></span>
           <span class="category-name">{{ category.name }}</span>
+          @if (category.monthly_budget_cents) {
+            <span class="budget-hint">{{ formatCents(category.monthly_budget_cents) }} / mes</span>
+          }
 
           @if (category.id !== sentinelId) {
             <div class="category-row-actions">
@@ -48,6 +51,15 @@
       [value]="form.controls.color_hex.value"
       (valueChange)="setColor($event)"
     />
+
+    <label class="field">
+      <input
+        formControlName="budget_pesos"
+        type="number"
+        min="1"
+        placeholder="Presupuesto mensual (opcional)"
+      />
+    </label>
 
     <button class="btn btn-primary" type="submit" [disabled]="form.invalid">
       {{ editingCategoryId() ? 'Guardar cambios' : 'Crear categoría' }}

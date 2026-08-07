@@ -33,6 +33,11 @@ h1 {
   font-weight: 700;
 }
 
+.budget-hint {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
 .category-row-actions {
   display: flex;
   gap: 6px;
