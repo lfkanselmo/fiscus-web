@@ -1,0 +1,17 @@
+<div class="budget-bar-row">
+  <div class="budget-bar-header">
+    <span class="dot" [style.background]="status().category.color_hex"></span>
+    <span class="budget-bar-name">{{ status().category.name }}</span>
+    <span class="budget-bar-amounts" [class.over]="overBudget()">
+      {{ spentLabel() }} / {{ budgetLabel() }}
+    </span>
+  </div>
+  <div class="budget-bar-track">
+    <div
+      class="budget-bar-fill"
+      [class.over]="overBudget()"
+      [style.width.%]="widthPercent()"
+      [style.background]="overBudget() ? null : status().category.color_hex"
+    ></div>
+  </div>
+</div>

@@ -6,10 +6,12 @@ import { GridComponent, TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 
 import { MetricsService } from '../../core/services/metrics.service';
+import { BudgetStatus } from '../../core/models/budget-status.model';
 import { MonthlyCategoryMetric } from '../../core/models/monthly-metric.model';
 import { MonthlyTrendPoint } from '../../core/models/monthly-trend.model';
 import { currentMonthValue, parseMonthValue } from '../../core/utils/month-value';
 import { readChartTheme } from '../../core/utils/css-theme';
+import { BudgetBar } from '../../shared/components/budget-bar/budget-bar';
 import { MonthPicker } from '../../shared/components/month-picker/month-picker';
 import { buildCategoryChartOptions, buildTrendChartOptions } from './chart-options';
 
@@ -19,7 +21,7 @@ echarts.use([BarChart, LineChart, GridComponent, TooltipComponent, CanvasRendere
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgxEchartsDirective, MonthPicker],
+  imports: [NgxEchartsDirective, MonthPicker, BudgetBar],
   providers: [provideEchartsCore({ echarts })],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
@@ -30,6 +32,7 @@ export class Dashboard {
   readonly selectedMonth = signal(currentMonthValue());
   readonly monthlyMetrics = signal<MonthlyCategoryMetric[]>([]);
   readonly monthlyTrend = signal<MonthlyTrendPoint[]>([]);
+  readonly budgetStatuses = signal<BudgetStatus[]>([]);
 
   readonly categoryChartOptions = computed(() =>
     buildCategoryChartOptions(this.monthlyMetrics(), readChartTheme()),
@@ -54,5 +57,8 @@ export class Dashboard {
     this.metricsService
       .monthly(year, month)
       .subscribe((metrics) => this.monthlyMetrics.set(metrics));
+    this.metricsService
+      .budgets(year, month)
+      .subscribe((statuses) => this.budgetStatuses.set(statuses));
   }
 }

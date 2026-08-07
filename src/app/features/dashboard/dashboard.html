@@ -5,6 +5,19 @@
   </div>
 
   <div class="panel">
+    <p class="panel-title">Presupuestos</p>
+    @if (budgetStatuses().length) {
+      <div class="budget-bars">
+        @for (status of budgetStatuses(); track status.category.id) {
+          <app-budget-bar [status]="status" />
+        }
+      </div>
+    } @else {
+      <p class="empty">No hay presupuestos configurados. Definí uno desde Categorías.</p>
+    }
+  </div>
+
+  <div class="panel">
     <p class="panel-title">Gasto por categoría</p>
     @if (monthlyMetrics().length) {
       <div echarts [options]="categoryChartOptions()" class="chart chart-category"></div>
