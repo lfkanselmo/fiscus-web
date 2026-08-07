@@ -3,7 +3,8 @@
 SPA en Angular 21 para [Fiscus](../SAD_Fiscus_Motor_Categorizacion.md), el motor de categorización
 inteligente de gastos. Consume la API REST de [`fiscus-api`](../fiscus-api) para importar extractos
 bancarios, listar y recategorizar transacciones, gestionar categorías y sus reglas de categorización, y
-ver métricas mensuales.
+ver métricas mensuales. Requiere una cuenta (registro/login) — cada usuario ve únicamente sus propios
+datos.
 
 ---
 
@@ -73,6 +74,12 @@ dirige el navegador contra lo que ya esté levantado. Los specs (`e2e/*.spec.ts`
 datos únicos por corrida (nombres con timestamp) en vez de asumir una base de datos vacía, así
 conviven con lo que ya haya en la base de datos de desarrollo.
 
+Como todas las rutas salvo `/login`/`/register` exigen sesión, la mayoría de los specs importan
+`test`/`expect` desde `./fixtures/auth` en vez de `@playwright/test` directamente — ese fixture
+registra un usuario descartable por HTTP antes de cada test y precarga el token en `localStorage`, sin
+pasar por la UI de login. `auth.spec.ts` es la excepción: prueba el flujo de login/registro real, así
+que usa `@playwright/test` sin el fixture.
+
 ---
 
 ## Estructura del proyecto
@@ -82,10 +89,13 @@ src/app/
 ├── core/
 │   ├── config/           (URL base de la API)
 │   ├── constants/          (MONTH_NAMES, CATEGORY_COLOR_PRESETS, RULE_LEAF_TYPE_OPTIONS, WEEKDAY_LABELS_SHORT — únicas fuentes de verdad)
-│   ├── models/              (interfaces TS — reflejan el JSON del backend tal cual, sin capa de mapeo)
-│   ├── services/             (un servicio HttpClient por recurso)
-│   └── utils/                 (funciones puras: currency, month-value, color, css-theme, rule-tree)
+│   ├── guards/              (authGuard — redirige a /login sin sesión)
+│   ├── interceptors/         (authInterceptor — adjunta el Bearer token, cierra sesión ante un 401)
+│   ├── models/                 (interfaces TS — reflejan el JSON del backend tal cual, sin capa de mapeo)
+│   ├── services/                (un servicio HttpClient por recurso, incluye AuthService)
+│   └── utils/                    (funciones puras: currency, month-value, color, css-theme, rule-tree)
 ├── features/
+│   ├── auth/                     (login-page, register-page)
 │   ├── dashboard/               (orquestación: pide datos, delega mes y gráficos)
 │   │   └── chart-options.ts      (builders puros de opciones de echarts, testeables sin Angular)
 │   ├── categories/              (lista, alta, edición y borrado de categorías)
@@ -122,6 +132,10 @@ src/app/
 - **Sin capa de mapeo DTO↔modelo.** Los interfaces en `core/models` reflejan el JSON del backend
   (`snake_case`) tal cual, en vez de convertirlo a `camelCase`. Es una API interna que controlamos
   nosotros mismos; la traducción no pagaba su complejidad.
+- **Autenticación vía guard + interceptor, no wrapper por componente.** `authGuard`
+  (`canActivateChild`) protege las 4 rutas de features de un solo lugar en `app.routes.ts`, en vez de
+  repetir la comprobación en cada componente. `authInterceptor` adjunta el token a cada request
+  saliente y centraliza el logout-en-401 — ningún servicio de `core/services` sabe nada de tokens.
 - **Sin Angular Material.** Se probó inicialmente (`mat.theme()` + componentes M3), pero el look por
   defecto de Material (botones en píldora, `mat-form-field` con label flotante) competía con la
   identidad visual de Fiscus en vez de reforzarla. Tampoco un `<select>` o un `<input type="color">`
@@ -172,5 +186,11 @@ MVP completo (S0–S8).
 (comercio/monto/día de la semana combinables con Y/O/NO), reemplazando las reglas que antes vivían
 hardcodeadas en el backend. Confirmación de borrado en dos pasos ("Eliminar" → "¿Confirmar?") en vez de
 `window.confirm()`, consistente con "cero controles nativos del navegador".
+
+**Autenticación (post-MVP)**: login/registro, guard de rutas e interceptor de token — la API pasó a
+exigir sesión y aislar los datos por usuario, así que la SPA necesitaba la contraparte. Token en
+`localStorage` (no hay `[innerHTML]`/`bypassSecurityTrustHtml` en toda la app, así que el riesgo de
+robo por XSS es bajo; se prefirió sobre `sessionStorage` para no forzar un re-login en cada cierre de
+pestaña, dado que no hay refresh token en esta versión).
 
 Detalle completo en [`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
