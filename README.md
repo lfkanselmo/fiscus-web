@@ -95,7 +95,7 @@ src/app/
 │   ├── services/                (un servicio HttpClient por recurso, incluye AuthService)
 │   └── utils/                    (funciones puras: currency, month-value, color, css-theme, rule-tree)
 ├── features/
-│   ├── auth/                     (login-page, register-page)
+│   ├── auth/                     (login-page, register-page, forgot-password-page, reset-password-page)
 │   ├── dashboard/               (orquestación: pide datos, delega mes y gráficos)
 │   │   └── chart-options.ts      (builders puros de opciones de echarts, testeables sin Angular)
 │   ├── categories/              (lista, alta, edición y borrado de categorías)
@@ -192,5 +192,11 @@ exigir sesión y aislar los datos por usuario, así que la SPA necesitaba la con
 `localStorage` (no hay `[innerHTML]`/`bypassSecurityTrustHtml` en toda la app, así que el riesgo de
 robo por XSS es bajo; se prefirió sobre `sessionStorage` para no forzar un re-login en cada cierre de
 pestaña, dado que no hay refresh token en esta versión).
+
+**Recuperación de contraseña (post-MVP)**: `forgot-password-page` (solicita el correo, mensaje
+genérico de éxito sin importar si el email existe) y `reset-password-page` (token leído del query
+param, nueva contraseña con confirmación). Cobertura e2e limitada a comportamiento de UI — el entorno
+de test no tiene SMTP real, así que el round-trip completo (token real, contraseña nueva funcional)
+está cubierto por el test de integración de `fiscus-api`, no por Playwright.
 
 Detalle completo en [`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
