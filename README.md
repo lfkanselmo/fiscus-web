@@ -2,7 +2,8 @@
 
 SPA en Angular 21 para [Fiscus](../SAD_Fiscus_Motor_Categorizacion.md), el motor de categorización
 inteligente de gastos. Consume la API REST de [`fiscus-api`](../fiscus-api) para importar extractos
-bancarios, listar y recategorizar transacciones, gestionar categorías y ver métricas mensuales.
+bancarios, listar y recategorizar transacciones, gestionar categorías y sus reglas de categorización, y
+ver métricas mensuales.
 
 ---
 
@@ -80,22 +81,24 @@ conviven con lo que ya haya en la base de datos de desarrollo.
 src/app/
 ├── core/
 │   ├── config/           (URL base de la API)
-│   ├── constants/          (MONTH_NAMES, CATEGORY_COLOR_PRESETS — únicas fuentes de verdad)
+│   ├── constants/          (MONTH_NAMES, CATEGORY_COLOR_PRESETS, RULE_LEAF_TYPE_OPTIONS, WEEKDAY_LABELS_SHORT — únicas fuentes de verdad)
 │   ├── models/              (interfaces TS — reflejan el JSON del backend tal cual, sin capa de mapeo)
 │   ├── services/             (un servicio HttpClient por recurso)
-│   └── utils/                 (funciones puras: currency, month-value, color, css-theme)
+│   └── utils/                 (funciones puras: currency, month-value, color, css-theme, rule-tree)
 ├── features/
 │   ├── dashboard/               (orquestación: pide datos, delega mes y gráficos)
 │   │   └── chart-options.ts      (builders puros de opciones de echarts, testeables sin Angular)
-│   ├── categories/              (lista + alta de categorías)
+│   ├── categories/              (lista, alta, edición y borrado de categorías)
+│   │   └── category-rules-panel/ (reglas de una categoría; rule-card/ edita una regla)
 │   ├── transactions/            (listado, filtro por categoría, recategorización manual)
 │   └── import/                    (subida de CSV/PDF y resumen de resultado)
 └── shared/
     ├── components/
-    │   ├── category-badge/        (punto de color + nombre — nav, tabla, selector)
     │   ├── select-field/            (desplegable propio, reemplaza <select> nativo)
     │   ├── month-picker/            (stepper + popover año/mes, usado en dashboard)
-    │   └── color-picker-field/       (panel HSV + hex + presets, reemplaza <input type="color">)
+    │   ├── color-picker-field/       (panel HSV + hex + presets, reemplaza <input type="color">)
+    │   ├── rule-node-editor/          (editor recursivo de un nodo del árbol de reglas — Y/O/NO)
+    │   └── weekday-toggle/             (7 chips lun..dom, reemplaza <select multiple>)
     └── pipes/                        (formato de moneda COP)
 ```
 
@@ -108,7 +111,11 @@ src/app/
   selector de mes ni cómo armar una opción de `echarts` — delega en `MonthPicker` y en las funciones
   puras de `chart-options.ts`. Mismo criterio para `SelectField` y `ColorPickerField`: cada uno se
   usa en más de un lugar (o está listo para reutilizarse) y no conoce nada del dominio de negocio
-  que lo consume, solo `value`/`valueChange`.
+  que lo consume, solo `value`/`valueChange`. `RuleNodeEditor` lleva esto un paso más: es un
+  componente **recursivo** (se importa a sí mismo) que edita un nodo del árbol de reglas — cada
+  instancia recibe el árbol completo (`root`) más su propia posición (`path`), calcula la "nueva raíz"
+  con las funciones puras de `rule-tree.ts` y la emite hacia arriba sin que ningún ancestro necesite
+  reconciliar nada.
 - **Constantes y utilidades centralizadas.** Nada de arrays o `Intl.NumberFormat` repetidos dentro de
   componentes — todo vive en `core/constants` y `core/utils`, con tests unitarios propios donde hay
   lógica real (conversión de color, aritmética de meses).
@@ -137,11 +144,12 @@ Clases utilitarias globales en `styles.scss`, sin dependencia de ningún framewo
 
 | Clase | Uso |
 | --- | --- |
-| `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-ghost` | Botones |
+| `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-ghost`, `.btn-danger` | Botones |
 | `.field` (con `<input>`) | Campo de texto |
 | `.field-file` + `.dropzone` | Selector de archivo (input nativo oculto sobre una zona estilizada) |
 | `.picker-backdrop` | Fondo compartido por cualquier panel flotante (popover) |
 | `.swatch-picker` + `.swatch` | Grilla de colores preestablecidos |
+| `.weekday-toggle` + `.weekday-toggle-day` | Chips de día de la semana (reemplaza `<select multiple>`) |
 
 Los controles con popup propio (`SelectField`, `MonthPicker`, `ColorPickerField`) tienen su CSS
 scoped al componente, pero comparten `.picker-backdrop` y los mismos tokens de color/radio que el
@@ -158,5 +166,11 @@ Angular 21 (standalone, signals) · RxJS · echarts / ngx-echarts · Vitest · T
 
 ## Roadmap
 
-MVP completo (S0–S8). Detalle completo en
-[`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
+MVP completo (S0–S8).
+
+**RF-03 (post-MVP)**: edición/borrado de categorías y un editor de reglas de categorización compuestas
+(comercio/monto/día de la semana combinables con Y/O/NO), reemplazando las reglas que antes vivían
+hardcodeadas en el backend. Confirmación de borrado en dos pasos ("Eliminar" → "¿Confirmar?") en vez de
+`window.confirm()`, consistente con "cero controles nativos del navegador".
+
+Detalle completo en [`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
