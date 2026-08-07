@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/auth';
 
 test('reporta filas inválidas sin abortar la importación completa', async ({ page }) => {
   const merchant = `Netflix E2E ${Date.now()}`;
@@ -17,9 +17,7 @@ test('reporta filas inválidas sin abortar la importación completa', async ({ p
   await page.getByRole('button', { name: 'Importar' }).click();
 
   await expect(page.locator('.tile', { hasText: 'Creadas' }).locator('.v')).toHaveText('1');
-  await expect(page.locator('.tile', { hasText: 'Filas inválidas' }).locator('.v')).toHaveText(
-    '1',
-  );
+  await expect(page.locator('.tile', { hasText: 'Filas inválidas' }).locator('.v')).toHaveText('1');
 
   const errorReport = page.locator('.error-report');
   await expect(errorReport).toBeVisible();

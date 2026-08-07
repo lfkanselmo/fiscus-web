@@ -8,12 +8,17 @@
     <span>Fiscus</span>
   </div>
 
-  <nav>
-    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-    <a routerLink="/transacciones" routerLinkActive="active">Transacciones</a>
-    <a routerLink="/categorias" routerLinkActive="active">Categorías</a>
-    <a routerLink="/importar" routerLinkActive="active">Importar</a>
-  </nav>
+  @if (authService.isAuthenticated()) {
+    <nav>
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/transacciones" routerLinkActive="active">Transacciones</a>
+      <a routerLink="/categorias" routerLinkActive="active">Categorías</a>
+      <a routerLink="/importar" routerLinkActive="active">Importar</a>
+      <button class="btn btn-ghost" type="button" (click)="authService.logout()">
+        Cerrar sesión
+      </button>
+    </nav>
+  }
 </header>
 
 <main>

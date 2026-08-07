@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/auth';
 
 test('edita el nombre y color de una categoría y luego la borra', async ({ page }) => {
   const name = `Suscripciones E2E ${Date.now()}`;

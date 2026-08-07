@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/auth';
 
 test('importa un extracto, categoriza automáticamente y permite recategorizar', async ({
   page,

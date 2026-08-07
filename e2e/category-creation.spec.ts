@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/auth';
 
 test('crea una categoría nueva eligiendo un color con el picker HSV', async ({ page }) => {
   const name = `Mascotas E2E ${Date.now()}`;

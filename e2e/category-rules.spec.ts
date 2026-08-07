@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures/auth';
 
 test('agrega una regla compuesta a una categoría, la edita y la borra', async ({ page }) => {
   const name = `Delivery E2E ${Date.now()}`;
