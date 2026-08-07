@@ -96,7 +96,7 @@ src/app/
 │   └── utils/                    (funciones puras: currency, month-value, color, css-theme, rule-tree)
 ├── features/
 │   ├── auth/                     (login-page, register-page, forgot-password-page, reset-password-page)
-│   ├── dashboard/               (orquestación: pide datos, delega mes y gráficos)
+│   ├── dashboard/               (orquestación: pide datos, delega mes, gráficos y presupuestos)
 │   │   └── chart-options.ts      (builders puros de opciones de echarts, testeables sin Angular)
 │   ├── categories/              (lista, alta, edición y borrado de categorías)
 │   │   └── category-rules-panel/ (reglas de una categoría; rule-card/ edita una regla)
@@ -108,7 +108,8 @@ src/app/
     │   ├── month-picker/            (stepper + popover año/mes, usado en dashboard)
     │   ├── color-picker-field/       (panel HSV + hex + presets, reemplaza <input type="color">)
     │   ├── rule-node-editor/          (editor recursivo de un nodo del árbol de reglas — Y/O/NO)
-    │   └── weekday-toggle/             (7 chips lun..dom, reemplaza <select multiple>)
+    │   ├── weekday-toggle/             (7 chips lun..dom, reemplaza <select multiple>)
+    │   └── budget-bar/                  (barra gastado/presupuesto de una categoría, 100% presentacional)
     └── pipes/                        (formato de moneda COP)
 ```
 
@@ -198,5 +199,13 @@ genérico de éxito sin importar si el email existe) y `reset-password-page` (to
 param, nueva contraseña con confirmación). Cobertura e2e limitada a comportamiento de UI — el entorno
 de test no tiene SMTP real, así que el round-trip completo (token real, contraseña nueva funcional)
 está cubierto por el test de integración de `fiscus-api`, no por Playwright.
+
+**Presupuestos por categoría (post-MVP)**: el form de `category-list` gana un campo opcional de
+presupuesto mensual (pesos en la UI, convertido a centavos con `pesosToCents`/`centsToPesos` —
+mismo patrón que ya usa `rule-node-editor` para el monto de una regla). El dashboard suma un panel
+"Presupuestos" con una `budget-bar` por categoría presupuestada (gastado/presupuesto, en rojo si se
+supera). El backend devuelve solo números crudos (`budget_cents`, `spent_cents`); `core/utils/budget.ts`
+calcula porcentaje y estado de "sobre presupuesto" — mismo criterio que ya usa `chart-options.ts` para
+las opciones de los gráficos.
 
 Detalle completo en [`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
