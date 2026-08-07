@@ -76,7 +76,9 @@ export class RuleNodeEditor {
   }
 
   wrapAnd(): void {
-    this.rootChange.emit(wrapWithAnd(this.root(), this.path(), defaultLeafFor('merchant_contains')));
+    this.rootChange.emit(
+      wrapWithAnd(this.root(), this.path(), defaultLeafFor('merchant_contains')),
+    );
   }
 
   wrapOr(): void {

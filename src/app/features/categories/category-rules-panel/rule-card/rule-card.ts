@@ -3,7 +3,11 @@ import { Component, computed, effect, inject, input, output, signal } from '@ang
 import { RULE_LEAF_TYPE_OPTIONS } from '../../../../core/constants/rule-types';
 import { CategoryRule, RuleLeafType, RuleNode } from '../../../../core/models/category-rule.model';
 import { CategoryRulesService } from '../../../../core/services/category-rules.service';
-import { defaultLeafFor, describeRuleNode, isRuleNodeComplete } from '../../../../core/utils/rule-tree';
+import {
+  defaultLeafFor,
+  describeRuleNode,
+  isRuleNodeComplete,
+} from '../../../../core/utils/rule-tree';
 import { RuleNodeEditor } from '../../../../shared/components/rule-node-editor/rule-node-editor';
 import { SelectField } from '../../../../shared/components/select-field/select-field';
 

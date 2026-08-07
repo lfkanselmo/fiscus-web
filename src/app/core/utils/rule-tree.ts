@@ -7,7 +7,8 @@ export type RulePath = RulePathStep[];
 
 function getChild(node: RuleNode, step: RulePathStep): RuleNode {
   if (step === 'rule') {
-    if (node.type !== 'not') throw new Error(`invalid path step 'rule' on node type '${node.type}'`);
+    if (node.type !== 'not')
+      throw new Error(`invalid path step 'rule' on node type '${node.type}'`);
     return node.rule;
   }
   if (node.type !== 'and' && node.type !== 'or') {
@@ -18,7 +19,8 @@ function getChild(node: RuleNode, step: RulePathStep): RuleNode {
 
 function withChild(node: RuleNode, step: RulePathStep, child: RuleNode): RuleNode {
   if (step === 'rule') {
-    if (node.type !== 'not') throw new Error(`invalid path step 'rule' on node type '${node.type}'`);
+    if (node.type !== 'not')
+      throw new Error(`invalid path step 'rule' on node type '${node.type}'`);
     return { ...node, rule: child };
   }
   if (node.type !== 'and' && node.type !== 'or') {

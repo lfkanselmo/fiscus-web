@@ -42,11 +42,20 @@
       />
       @if (node().type === 'merchant_contains') {
         <label class="field">
-          <input [value]="merchantKeyword()" (input)="updateKeyword($event)" placeholder="Palabra clave" />
+          <input
+            [value]="merchantKeyword()"
+            (input)="updateKeyword($event)"
+            placeholder="Palabra clave"
+          />
         </label>
       } @else if (node().type === 'amount_greater_than') {
         <label class="field">
-          <input type="number" [value]="amountPesos()" (input)="updateAmount($event)" placeholder="Monto" />
+          <input
+            type="number"
+            [value]="amountPesos()"
+            (input)="updateAmount($event)"
+            placeholder="Monto"
+          />
         </label>
       } @else if (node().type === 'weekday') {
         <app-weekday-toggle [value]="weekdays()" (valueChange)="updateWeekdays($event)" />
