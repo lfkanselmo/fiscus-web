@@ -12,5 +12,5 @@ test('crea una categoría nueva eligiendo un color con el picker HSV', async ({ 
 
   await page.getByRole('button', { name: 'Crear categoría' }).click();
 
-  await expect(page.locator('.badge-row')).toContainText(name);
+  await expect(page.locator('.category-rows')).toContainText(name);
 });

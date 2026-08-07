@@ -1,0 +1,21 @@
+<div class="rules-panel">
+  @for (rule of rules(); track rule.id) {
+    <app-rule-card [rule]="rule" [categoryId]="categoryId()" (changed)="onChanged()" />
+  }
+
+  @if (creatingNew()) {
+    <app-rule-card
+      [categoryId]="categoryId()"
+      (changed)="onChanged()"
+      (discarded)="onDraftDiscarded()"
+    />
+  }
+
+  @if (!rules().length && !creatingNew()) {
+    <p class="rules-panel-empty">Esta categoría no tiene reglas todavía.</p>
+  }
+
+  @if (!creatingNew()) {
+    <button class="btn btn-secondary" type="button" (click)="addRule()">+ Agregar regla</button>
+  }
+</div>

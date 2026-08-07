@@ -1,9 +1,41 @@
 <section class="page">
   <h1>Categorías</h1>
 
-  <div class="badge-row">
+  <div class="category-rows">
     @for (category of categories(); track category.id) {
-      <app-category-badge [category]="category" />
+      <div class="category-row">
+        <div class="category-row-header">
+          <span class="dot" [style.background]="category.color_hex"></span>
+          <span class="category-name">{{ category.name }}</span>
+
+          @if (category.id !== sentinelId) {
+            <div class="category-row-actions">
+              <button class="btn btn-ghost" type="button" (click)="toggleRules(category.id)">
+                {{ expandedCategoryId() === category.id ? 'Ocultar reglas' : 'Reglas' }}
+              </button>
+              <button class="btn btn-secondary" type="button" (click)="startEdit(category)">
+                Editar
+              </button>
+              @if (deleteConfirmId() === category.id) {
+                <button class="btn btn-danger" type="button" (click)="confirmDelete(category.id)">
+                  ¿Confirmar?
+                </button>
+                <button class="btn btn-ghost" type="button" (click)="cancelDeleteConfirm()">
+                  Cancelar
+                </button>
+              } @else {
+                <button class="btn btn-danger" type="button" (click)="requestDelete(category.id)">
+                  Eliminar
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        @if (expandedCategoryId() === category.id) {
+          <app-category-rules-panel [categoryId]="category.id" />
+        }
+      </div>
     }
   </div>
 
@@ -17,7 +49,12 @@
       (valueChange)="setColor($event)"
     />
 
-    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Crear categoría</button>
+    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">
+      {{ editingCategoryId() ? 'Guardar cambios' : 'Crear categoría' }}
+    </button>
+    @if (editingCategoryId()) {
+      <button class="btn btn-ghost" type="button" (click)="cancelEdit()">Cancelar</button>
+    }
   </form>
 
   @if (errorMessage()) {

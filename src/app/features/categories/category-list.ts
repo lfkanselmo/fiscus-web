@@ -1,17 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { CategoriesService } from '../../core/services/categories.service';
-import { Category } from '../../core/models/category.model';
 import { CATEGORY_COLOR_PRESETS } from '../../core/constants/category-colors';
-import { CategoryBadge } from '../../shared/components/category-badge/category-badge';
+import { UNCATEGORIZED_CATEGORY_ID } from '../../core/constants/sentinel-category';
+import { Category } from '../../core/models/category.model';
+import { CategoriesService } from '../../core/services/categories.service';
 import { ColorPickerField } from '../../shared/components/color-picker-field/color-picker-field';
+import { CategoryRulesPanel } from './category-rules-panel/category-rules-panel';
 
 const DEFAULT_COLOR: string = CATEGORY_COLOR_PRESETS[0];
 
 @Component({
   selector: 'app-category-list',
-  imports: [ReactiveFormsModule, CategoryBadge, ColorPickerField],
+  imports: [ReactiveFormsModule, ColorPickerField, CategoryRulesPanel],
   templateUrl: './category-list.html',
   styleUrl: './category-list.scss',
 })
@@ -19,8 +20,13 @@ export class CategoryList {
   private readonly categoriesService = inject(CategoriesService);
   private readonly formBuilder = inject(FormBuilder);
 
+  readonly sentinelId = UNCATEGORIZED_CATEGORY_ID;
+
   readonly categories = signal<Category[]>([]);
   readonly errorMessage = signal<string | null>(null);
+  readonly editingCategoryId = signal<string | null>(null);
+  readonly expandedCategoryId = signal<string | null>(null);
+  readonly deleteConfirmId = signal<string | null>(null);
 
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
@@ -40,9 +46,16 @@ export class CategoryList {
       return;
     }
     this.errorMessage.set(null);
-    this.categoriesService.create(this.form.getRawValue()).subscribe({
+    const payload = this.form.getRawValue();
+    const editingId = this.editingCategoryId();
+    const request = editingId
+      ? this.categoriesService.update(editingId, payload)
+      : this.categoriesService.create(payload);
+
+    request.subscribe({
       next: () => {
         this.form.reset({ name: '', color_hex: DEFAULT_COLOR });
+        this.editingCategoryId.set(null);
         this.reload();
       },
       error: () => this.errorMessage.set('Ya existe una categoría con ese nombre.'),
@@ -51,5 +64,38 @@ export class CategoryList {
 
   setColor(hex: string): void {
     this.form.controls.color_hex.setValue(hex);
+  }
+
+  startEdit(category: Category): void {
+    this.errorMessage.set(null);
+    this.editingCategoryId.set(category.id);
+    this.form.setValue({ name: category.name, color_hex: category.color_hex });
+  }
+
+  cancelEdit(): void {
+    this.editingCategoryId.set(null);
+    this.form.reset({ name: '', color_hex: DEFAULT_COLOR });
+  }
+
+  toggleRules(categoryId: string): void {
+    this.expandedCategoryId.update((current) => (current === categoryId ? null : categoryId));
+  }
+
+  requestDelete(categoryId: string): void {
+    this.deleteConfirmId.set(categoryId);
+  }
+
+  cancelDeleteConfirm(): void {
+    this.deleteConfirmId.set(null);
+  }
+
+  confirmDelete(categoryId: string): void {
+    this.categoriesService.delete(categoryId).subscribe(() => {
+      this.deleteConfirmId.set(null);
+      if (this.expandedCategoryId() === categoryId) {
+        this.expandedCategoryId.set(null);
+      }
+      this.reload();
+    });
   }
 }

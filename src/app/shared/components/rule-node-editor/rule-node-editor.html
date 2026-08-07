@@ -1,0 +1,56 @@
+<div class="rule-node">
+  <div class="rule-node-toolbar">
+    <button class="btn btn-ghost" type="button" (click)="wrapAnd()">Agrupar con Y</button>
+    <button class="btn btn-ghost" type="button" (click)="wrapOr()">Agrupar con O</button>
+    @if (node().type === 'not') {
+      <button class="btn btn-ghost" type="button" (click)="unwrapNot()">Quitar negación</button>
+    } @else {
+      <button class="btn btn-ghost" type="button" (click)="wrapNot()">Negar</button>
+    }
+    <button class="btn btn-danger" type="button" (click)="remove()">Quitar</button>
+  </div>
+
+  @if (node().type === 'and' || node().type === 'or') {
+    <div class="rule-node-composite">
+      <app-rule-node-editor
+        [root]="root()"
+        [path]="childPath('left')"
+        (rootChange)="propagate($event)"
+      />
+      <span class="rule-node-operator">{{ node().type === 'and' ? 'Y' : 'O' }}</span>
+      <app-rule-node-editor
+        [root]="root()"
+        [path]="childPath('right')"
+        (rootChange)="propagate($event)"
+      />
+    </div>
+  } @else if (node().type === 'not') {
+    <div class="rule-node-not">
+      <span class="rule-node-operator">NO</span>
+      <app-rule-node-editor
+        [root]="root()"
+        [path]="childPath('rule')"
+        (rootChange)="propagate($event)"
+      />
+    </div>
+  } @else {
+    <div class="rule-node-leaf">
+      <app-select-field
+        [options]="leafTypeOptions"
+        [value]="node().type"
+        (valueChange)="changeLeafType($event)"
+      />
+      @if (node().type === 'merchant_contains') {
+        <label class="field">
+          <input [value]="merchantKeyword()" (input)="updateKeyword($event)" placeholder="Palabra clave" />
+        </label>
+      } @else if (node().type === 'amount_greater_than') {
+        <label class="field">
+          <input type="number" [value]="amountPesos()" (input)="updateAmount($event)" placeholder="Monto" />
+        </label>
+      } @else if (node().type === 'weekday') {
+        <app-weekday-toggle [value]="weekdays()" (valueChange)="updateWeekdays($event)" />
+      }
+    </div>
+  }
+</div>

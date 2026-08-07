@@ -149,6 +149,15 @@ body {
 .btn-ghost:hover:not(:disabled) {
   background: var(--brand-soft);
 }
+.btn-danger {
+  background: transparent;
+  color: var(--critical);
+  border: 1px solid var(--critical);
+}
+.btn-danger:hover:not(:disabled) {
+  background: var(--critical);
+  color: var(--surface);
+}
 
 /* ---------- Campos: texto, archivo ---------- */
 .field {
@@ -241,4 +250,31 @@ body {
   box-shadow:
     0 0 0 2px var(--surface),
     0 0 0 4px var(--ink);
+}
+
+/* ---------- Toggle de días de la semana ---------- */
+.weekday-toggle {
+  display: flex;
+  gap: 6px;
+}
+.weekday-toggle-day {
+  appearance: none;
+  width: 36px;
+  height: 32px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.weekday-toggle-day:hover {
+  border-color: var(--brand);
+}
+.weekday-toggle-day.selected {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--surface);
 }

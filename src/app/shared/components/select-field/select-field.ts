@@ -12,7 +12,7 @@ export interface SelectOption {
   styleUrl: './select-field.scss',
 })
 export class SelectField {
-  readonly options = input.required<SelectOption[]>();
+  readonly options = input.required<readonly SelectOption[]>();
   readonly value = input<string>('');
   readonly placeholder = input('Seleccionar');
   readonly valueChange = output<string>();

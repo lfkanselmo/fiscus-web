@@ -1,0 +1,47 @@
+:host {
+  display: block;
+}
+
+.rule-node {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+}
+
+.rule-node-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.rule-node-toolbar .btn {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.rule-node-leaf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.rule-node-composite,
+.rule-node-not {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 16px;
+  border-left: 2px solid var(--border);
+}
+
+.rule-node-operator {
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}

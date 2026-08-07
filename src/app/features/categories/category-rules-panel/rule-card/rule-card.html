@@ -1,0 +1,29 @@
+<div class="rule-card">
+  @if (!editing()) {
+    <p class="rule-card-description">{{ description() }}</p>
+    <div class="rule-card-actions">
+      <button class="btn btn-secondary" type="button" (click)="edit()">Editar</button>
+      @if (deleteConfirm()) {
+        <button class="btn btn-danger" type="button" (click)="confirmDelete()">¿Confirmar?</button>
+        <button class="btn btn-ghost" type="button" (click)="cancelDelete()">Cancelar</button>
+      } @else {
+        <button class="btn btn-danger" type="button" (click)="requestDelete()">Eliminar</button>
+      }
+    </div>
+  } @else {
+    @if (draft(); as node) {
+      <app-rule-node-editor [root]="node" [path]="[]" (rootChange)="draft.set($event)" />
+    } @else {
+      <div class="rule-card-empty">
+        <p>Elige un tipo de condición para esta regla.</p>
+        <app-select-field [options]="leafTypeOptions" (valueChange)="startNewLeaf($event)" />
+      </div>
+    }
+    <div class="rule-card-actions">
+      <button class="btn btn-primary" type="button" [disabled]="!canSave()" (click)="save()">
+        Guardar
+      </button>
+      <button class="btn btn-ghost" type="button" (click)="cancel()">Cancelar</button>
+    </div>
+  }
+</div>

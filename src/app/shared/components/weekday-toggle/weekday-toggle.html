@@ -1,0 +1,12 @@
+<div class="weekday-toggle">
+  @for (day of days; track day; let i = $index) {
+    <button
+      class="weekday-toggle-day"
+      type="button"
+      [class.selected]="value().includes(i)"
+      (click)="toggle(i)"
+    >
+      {{ day }}
+    </button>
+  }
+</div>
