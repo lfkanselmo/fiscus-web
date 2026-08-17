@@ -1,10 +1,17 @@
 # Fiscus Web
 
-SPA en Angular 21 para [Fiscus](../SAD_Fiscus_Motor_Categorizacion.md), el motor de categorización
-inteligente de gastos. Consume la API REST de [`fiscus-api`](../fiscus-api) para importar extractos
-bancarios, listar y recategorizar transacciones, gestionar categorías y sus reglas de categorización, y
-ver métricas mensuales. Requiere una cuenta (registro/login) — cada usuario ve únicamente sus propios
-datos.
+[![CI](https://github.com/lfkanselmo/fiscus-web/actions/workflows/ci.yml/badge.svg)](https://github.com/lfkanselmo/fiscus-web/actions/workflows/ci.yml)
+![Angular](https://img.shields.io/badge/Angular-21-DD0031?logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+
+SPA en Angular 21 para Fiscus, el motor de categorización inteligente de gastos. Consume la API
+REST de [`fiscus-api`](../fiscus-api) para importar extractos bancarios, listar y recategorizar
+transacciones, gestionar categorías y sus reglas de categorización, y ver métricas mensuales.
+Requiere una cuenta (registro/login) — cada usuario ve únicamente sus propios datos.
+
+## Capturas
+
+_(pendiente — agregar screenshot o GIF del dashboard, import y flujo de reglas)_
 
 ---
 
@@ -18,9 +25,9 @@ datos.
 ## Configuración
 
 La URL base de la API sale de `src/environments/environment.ts` (dev) / `environment.prod.ts`
-(producción, vía `fileReplacements` en `angular.json`). En Docker, `environment.prod.ts` se genera en
-build time a partir del build arg `API_BASE_URL` (ver más abajo) — no hace falta tocar código para
-apuntar a otra API.
+(producción, vía `fileReplacements` en `angular.json`). En Docker, `environment.prod.ts` se genera
+en build time a partir del build arg `API_BASE_URL` (ver más abajo) — no hace falta tocar código
+para apuntar a otra API.
 
 ---
 
@@ -31,7 +38,7 @@ npm install
 npm start
 ```
 
-La app queda disponible en `http://localhost:4200`.
+Queda disponible en `http://localhost:4200`.
 
 ## Build
 
@@ -59,8 +66,8 @@ npm test
 ```
 
 Vitest (test runner por defecto de Angular 21, reemplaza a Karma). Además de los tests de
-componentes, `core/utils` tiene tests unitarios puros (`color.spec.ts`, `month-value.spec.ts`) que no
-requieren TestBed.
+componentes, `core/utils` tiene tests unitarios puros (`color.spec.ts`, `month-value.spec.ts`) que
+no requieren TestBed.
 
 ### E2E
 
@@ -69,16 +76,16 @@ npm run e2e
 ```
 
 Playwright, contra navegador Chromium. Requiere `fiscus-api` (puerto 8000) y `fiscus-web`
-(`npm start`, puerto 4200) ya corriendo — el config no orquesta los servidores automáticamente, solo
-dirige el navegador contra lo que ya esté levantado. Los specs (`e2e/*.spec.ts`) generan sus propios
-datos únicos por corrida (nombres con timestamp) en vez de asumir una base de datos vacía, así
-conviven con lo que ya haya en la base de datos de desarrollo.
+(`npm start`, puerto 4200) ya corriendo — el config no orquesta los servidores automáticamente,
+solo dirige el navegador contra lo que ya esté levantado. Los specs (`e2e/*.spec.ts`) generan sus
+propios datos únicos por corrida (nombres con timestamp) en vez de asumir una base de datos vacía,
+así conviven con lo que ya haya en la base de datos de desarrollo.
 
 Como todas las rutas salvo `/login`/`/register` exigen sesión, la mayoría de los specs importan
 `test`/`expect` desde `./fixtures/auth` en vez de `@playwright/test` directamente — ese fixture
-registra un usuario descartable por HTTP antes de cada test y precarga el token en `localStorage`, sin
-pasar por la UI de login. `auth.spec.ts` es la excepción: prueba el flujo de login/registro real, así
-que usa `@playwright/test` sin el fixture.
+registra un usuario descartable por HTTP antes de cada test y precarga el token en `localStorage`,
+sin pasar por la UI de login. `auth.spec.ts` es la excepción: prueba el flujo de login/registro
+real, así que usa `@playwright/test` sin el fixture.
 
 ---
 
@@ -115,43 +122,45 @@ src/app/
 
 ## Patrones de arquitectura
 
-- **Standalone components + rutas lazy-loaded** (`loadComponent` por feature) — sin `NgModule`.
-- **Estado con Signals, no NgRx.** Cada feature maneja su propio estado local (`signal`/`computed`);
-  no hay store global — el dominio de UI de Fiscus no lo justifica.
+- **Standalone components + rutas lazy-loaded** (`loadComponent` por feature) — nada de
+  `NgModule`.
+- **Estado con Signals, no NgRx.** Cada feature maneja su propio estado local
+  (`signal`/`computed`); no hay store global, el dominio de UI de Fiscus no lo justifica.
 - **Componentes atómicos, con una sola responsabilidad.** `Dashboard` no sabe cómo dibujar un
-  selector de mes ni cómo armar una opción de `echarts` — delega en `MonthPicker` y en las funciones
-  puras de `chart-options.ts`. Mismo criterio para `SelectField` y `ColorPickerField`: cada uno se
-  usa en más de un lugar (o está listo para reutilizarse) y no conoce nada del dominio de negocio
-  que lo consume, solo `value`/`valueChange`. `RuleNodeEditor` lleva esto un paso más: es un
-  componente **recursivo** (se importa a sí mismo) que edita un nodo del árbol de reglas — cada
-  instancia recibe el árbol completo (`root`) más su propia posición (`path`), calcula la "nueva raíz"
-  con las funciones puras de `rule-tree.ts` y la emite hacia arriba sin que ningún ancestro necesite
-  reconciliar nada.
-- **Constantes y utilidades centralizadas.** Nada de arrays o `Intl.NumberFormat` repetidos dentro de
-  componentes — todo vive en `core/constants` y `core/utils`, con tests unitarios propios donde hay
-  lógica real (conversión de color, aritmética de meses).
+  selector de mes ni cómo armar una opción de `echarts` — delega en `MonthPicker` y en las
+  funciones puras de `chart-options.ts`. Mismo criterio para `SelectField` y `ColorPickerField`:
+  cada uno se usa en más de un lugar (o está listo para reutilizarse) y no conoce nada del dominio
+  de negocio que lo consume, solo `value`/`valueChange`. `RuleNodeEditor` va un paso más allá: es
+  un componente recursivo (se importa a sí mismo) que edita un nodo del árbol de reglas — cada
+  instancia recibe el árbol completo (`root`) más su propia posición (`path`), calcula la "nueva
+  raíz" con las funciones puras de `rule-tree.ts` y la emite hacia arriba sin que ningún ancestro
+  necesite reconciliar nada.
+- **Constantes y utilidades centralizadas.** Nada de arrays o `Intl.NumberFormat` repetidos dentro
+  de componentes — todo vive en `core/constants` y `core/utils`, con tests unitarios propios donde
+  hay lógica real (conversión de color, aritmética de meses).
 - **Sin capa de mapeo DTO↔modelo.** Los interfaces en `core/models` reflejan el JSON del backend
-  (`snake_case`) tal cual, en vez de convertirlo a `camelCase`. Es una API interna que controlamos
-  nosotros mismos; la traducción no pagaba su complejidad.
+  (`snake_case`) tal cual, en vez de convertirlo a `camelCase`. Es una API interna que controlo yo
+  mismo; la traducción no pagaba su complejidad.
 - **Autenticación vía guard + interceptor, no wrapper por componente.** `authGuard`
-  (`canActivateChild`) protege las 4 rutas de features de un solo lugar en `app.routes.ts`, en vez de
-  repetir la comprobación en cada componente. `authInterceptor` adjunta el token a cada request
-  saliente y centraliza el logout-en-401 — ningún servicio de `core/services` sabe nada de tokens.
-- **Sin Angular Material.** Se probó inicialmente (`mat.theme()` + componentes M3), pero el look por
-  defecto de Material (botones en píldora, `mat-form-field` con label flotante) competía con la
-  identidad visual de Fiscus en vez de reforzarla. Tampoco un `<select>` o un `<input type="color">`
-  nativos sirven del todo — el navegador/SO renderiza su propio popup, imposible de restilizar. Se
-  retiró Material por completo y se reemplazaron ambos controles nativos por componentes propios
-  (`SelectField`, `ColorPickerField`) 100% dibujados con nuestros tokens. `echarts`/`ngx-echarts` es
-  la única dependencia de UI de terceros que queda.
+  (`canActivateChild`) protege las 4 rutas de features desde un solo lugar en `app.routes.ts`, en
+  vez de repetir la comprobación en cada componente. `authInterceptor` adjunta el token a cada
+  request saliente y centraliza el logout-en-401 — ningún servicio de `core/services` sabe nada de
+  tokens.
+- **Sin Angular Material.** Lo probé inicialmente (`mat.theme()` + componentes M3), pero el look
+  por defecto de Material (botones en píldora, `mat-form-field` con label flotante) competía con
+  la identidad visual de Fiscus en vez de reforzarla. Tampoco un `<select>` o un
+  `<input type="color">` nativos sirven del todo — el navegador o el sistema operativo renderiza
+  su propio popup, imposible de restilizar. Lo retiré por completo y reemplacé ambos controles
+  nativos por componentes propios (`SelectField`, `ColorPickerField`) 100% dibujados con mis
+  tokens. `echarts`/`ngx-echarts` es la única dependencia de UI de terceros que queda.
 
 ---
 
 ## Identidad de marca
 
-Los tokens de color (tinta, verde de marca, acento cálido, paleta categórica) y tipografía (Manrope +
-JetBrains Mono para cifras) están centralizados en `src/styles.scss`, con soporte de tema claro/oscuro
-vía `prefers-color-scheme` y `[data-theme]`.
+Los tokens de color (tinta, verde de marca, acento cálido, paleta categórica) y tipografía
+(Manrope + JetBrains Mono para cifras) están centralizados en `src/styles.scss`, con soporte de
+tema claro/oscuro vía `prefers-color-scheme` y `[data-theme]`.
 
 ### Sistema de componentes de formulario
 
@@ -168,8 +177,8 @@ Clases utilitarias globales en `styles.scss`, sin dependencia de ningún framewo
 
 Los controles con popup propio (`SelectField`, `MonthPicker`, `ColorPickerField`) tienen su CSS
 scoped al componente, pero comparten `.picker-backdrop` y los mismos tokens de color/radio que el
-resto. Radio de esquina moderado (8px) en todos los controles — deliberadamente no-píldora, coherente
-con los trazos rectos del isotipo.
+resto. Radio de esquina moderado (8px) en todos los controles — deliberadamente no-píldora,
+coherente con los trazos rectos del isotipo.
 
 ---
 
@@ -183,29 +192,31 @@ Angular 21 (standalone, signals) · RxJS · echarts / ngx-echarts · Vitest · T
 
 MVP completo (S0–S8).
 
-**RF-03 (post-MVP)**: edición/borrado de categorías y un editor de reglas de categorización compuestas
-(comercio/monto/día de la semana combinables con Y/O/NO), reemplazando las reglas que antes vivían
-hardcodeadas en el backend. Confirmación de borrado en dos pasos ("Eliminar" → "¿Confirmar?") en vez de
-`window.confirm()`, consistente con "cero controles nativos del navegador".
+**RF-03 (post-MVP)**: edición/borrado de categorías y un editor de reglas de categorización
+compuestas (comercio/monto/día de la semana combinables con Y/O/NO), reemplazando las reglas que
+antes vivían hardcodeadas en el backend. Confirmación de borrado en dos pasos ("Eliminar" →
+"¿Confirmar?") en vez de `window.confirm()`, consistente con "cero controles nativos del
+navegador".
 
-**Autenticación (post-MVP)**: login/registro, guard de rutas e interceptor de token — la API pasó a
-exigir sesión y aislar los datos por usuario, así que la SPA necesitaba la contraparte. Token en
+**Autenticación (post-MVP)**: login/registro, guard de rutas e interceptor de token — la API pasó
+a exigir sesión y aislar los datos por usuario, así que la SPA necesitaba la contraparte. Token en
 `localStorage` (no hay `[innerHTML]`/`bypassSecurityTrustHtml` en toda la app, así que el riesgo de
-robo por XSS es bajo; se prefirió sobre `sessionStorage` para no forzar un re-login en cada cierre de
-pestaña, dado que no hay refresh token en esta versión).
+robo por XSS es bajo; lo preferí sobre `sessionStorage` para no forzar un re-login en cada cierre
+de pestaña, dado que no hay refresh token en esta versión).
 
 **Recuperación de contraseña (post-MVP)**: `forgot-password-page` (solicita el correo, mensaje
 genérico de éxito sin importar si el email existe) y `reset-password-page` (token leído del query
-param, nueva contraseña con confirmación). Cobertura e2e limitada a comportamiento de UI — el entorno
-de test no tiene SMTP real, así que el round-trip completo (token real, contraseña nueva funcional)
-está cubierto por el test de integración de `fiscus-api`, no por Playwright.
+param, nueva contraseña con confirmación). Cobertura e2e limitada a comportamiento de UI — el
+entorno de test no tiene SMTP real, así que el round-trip completo (token real, contraseña nueva
+funcional) queda cubierto por el test de integración de `fiscus-api`, no por Playwright.
 
 **Presupuestos por categoría (post-MVP)**: el form de `category-list` gana un campo opcional de
 presupuesto mensual (pesos en la UI, convertido a centavos con `pesosToCents`/`centsToPesos` —
 mismo patrón que ya usa `rule-node-editor` para el monto de una regla). El dashboard suma un panel
 "Presupuestos" con una `budget-bar` por categoría presupuestada (gastado/presupuesto, en rojo si se
-supera). El backend devuelve solo números crudos (`budget_cents`, `spent_cents`); `core/utils/budget.ts`
-calcula porcentaje y estado de "sobre presupuesto" — mismo criterio que ya usa `chart-options.ts` para
-las opciones de los gráficos.
+supera). El backend devuelve solo números crudos (`budget_cents`, `spent_cents`);
+`core/utils/budget.ts` calcula porcentaje y estado de "sobre presupuesto" — mismo criterio que ya
+usa `chart-options.ts` para las opciones de los gráficos.
 
-Detalle completo en [`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
+Detalle completo en
+[`SAD_Fiscus_Motor_Categorizacion.md`](../SAD_Fiscus_Motor_Categorizacion.md).
