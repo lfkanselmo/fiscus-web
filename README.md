@@ -3,6 +3,7 @@
 [![CI](https://github.com/lfkanselmo/fiscus-web/actions/workflows/ci.yml/badge.svg)](https://github.com/lfkanselmo/fiscus-web/actions/workflows/ci.yml)
 ![Angular](https://img.shields.io/badge/Angular-21-DD0031?logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![License](https://img.shields.io/badge/license-proprietary-lightgrey)
 
 SPA en Angular 21 para Fiscus, el motor de categorización inteligente de gastos. Consume la API
 REST de [`fiscus-api`](../fiscus-api) para importar extractos bancarios, listar y recategorizar
