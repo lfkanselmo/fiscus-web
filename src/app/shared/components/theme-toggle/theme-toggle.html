@@ -1,0 +1,26 @@
+<div class="theme-toggle" role="group" aria-label="Tema de la aplicación">
+  <button
+    type="button"
+    class="theme-toggle-option"
+    [class.selected]="themeService.preference() === 'system'"
+    (click)="themeService.setPreference('system')"
+  >
+    Auto
+  </button>
+  <button
+    type="button"
+    class="theme-toggle-option"
+    [class.selected]="themeService.preference() === 'light'"
+    (click)="themeService.setPreference('light')"
+  >
+    Claro
+  </button>
+  <button
+    type="button"
+    class="theme-toggle-option"
+    [class.selected]="themeService.preference() === 'dark'"
+    (click)="themeService.setPreference('dark')"
+  >
+    Oscuro
+  </button>
+</div>

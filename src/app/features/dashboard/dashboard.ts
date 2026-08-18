@@ -6,6 +6,7 @@ import { GridComponent, TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 
 import { MetricsService } from '../../core/services/metrics.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { BudgetStatus } from '../../core/models/budget-status.model';
 import { MonthlyCategoryMetric } from '../../core/models/monthly-metric.model';
 import { MonthlyTrendPoint } from '../../core/models/monthly-trend.model';
@@ -29,19 +30,22 @@ echarts.use([BarChart, LineChart, GridComponent, TooltipComponent, CanvasRendere
 })
 export class Dashboard {
   private readonly metricsService = inject(MetricsService);
+  private readonly themeService = inject(ThemeService);
 
   readonly selectedMonth = signal(currentMonthValue());
   readonly monthlyMetrics = signal<MonthlyCategoryMetric[]>([]);
   readonly monthlyTrend = signal<MonthlyTrendPoint[]>([]);
   readonly budgetStatuses = signal<BudgetStatus[]>([]);
 
-  readonly categoryChartOptions = computed(() =>
-    buildCategoryChartOptions(this.monthlyMetrics(), readChartTheme()),
-  );
+  readonly categoryChartOptions = computed(() => {
+    this.themeService.isDark();
+    return buildCategoryChartOptions(this.monthlyMetrics(), readChartTheme());
+  });
 
-  readonly trendChartOptions = computed(() =>
-    buildTrendChartOptions(this.monthlyTrend(), readChartTheme()),
-  );
+  readonly trendChartOptions = computed(() => {
+    this.themeService.isDark();
+    return buildTrendChartOptions(this.monthlyTrend(), readChartTheme());
+  });
 
   constructor() {
     this.reload();

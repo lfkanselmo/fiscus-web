@@ -17,19 +17,21 @@
     }
   </div>
 
-  <div class="panel">
-    <p class="panel-title">Gasto por categoría</p>
-    @if (monthlyMetrics().length) {
-      <div echarts [options]="categoryChartOptions()" class="chart chart-category"></div>
-    } @else {
-      <p class="empty">No hay gastos registrados para este mes.</p>
-    }
-  </div>
+  <div class="chart-grid">
+    <div class="panel">
+      <p class="panel-title">Gasto por categoría</p>
+      @if (monthlyMetrics().length) {
+        <div echarts [options]="categoryChartOptions()" class="chart chart-category"></div>
+      } @else {
+        <p class="empty">No hay gastos registrados para este mes.</p>
+      }
+    </div>
 
-  <div class="panel">
-    <p class="panel-title">Tendencia — últimos 6 meses</p>
-    @if (monthlyTrend().length) {
-      <div echarts [options]="trendChartOptions()" class="chart chart-trend"></div>
-    }
+    <div class="panel">
+      <p class="panel-title">Tendencia — últimos 6 meses</p>
+      @if (monthlyTrend().length) {
+        <div echarts [options]="trendChartOptions()" class="chart chart-trend"></div>
+      }
+    </div>
   </div>
 </section>
