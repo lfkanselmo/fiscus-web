@@ -1,11 +1,11 @@
 # Fiscus Web
 
 [![CI](https://github.com/lfkanselmo/fiscus-web/actions/workflows/ci.yml/badge.svg)](https://github.com/lfkanselmo/fiscus-web/actions/workflows/ci.yml)
-![Angular](https://img.shields.io/badge/Angular-21-DD0031?logo=angular&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/license-proprietary-lightgrey)
 
-SPA en Angular 21 para Fiscus, el motor de categorización inteligente de gastos. Consume la API
+SPA en Angular 22 para Fiscus, el motor de categorización inteligente de gastos. Consume la API
 REST de [`fiscus-api`](../fiscus-api) para importar extractos bancarios, listar y recategorizar
 transacciones, gestionar categorías y sus reglas de categorización, y ver métricas mensuales.
 Requiere una cuenta (registro/login) — cada usuario ve únicamente sus propios datos.
@@ -66,7 +66,7 @@ fallback a `index.html` para las rutas del router. Para el stack completo (API +
 npm test
 ```
 
-Vitest (test runner por defecto de Angular 21, reemplaza a Karma). Además de los tests de
+Vitest (test runner por defecto de Angular, reemplaza a Karma). Además de los tests de
 componentes, `core/utils` tiene tests unitarios puros (`color.spec.ts`, `month-value.spec.ts`) que
 no requieren TestBed.
 
@@ -159,9 +159,16 @@ src/app/
 
 ## Identidad de marca
 
-Los tokens de color (tinta, verde de marca, acento cálido, paleta categórica) y tipografía
-(Manrope + JetBrains Mono para cifras) están centralizados en `src/styles.scss`, con soporte de
-tema claro/oscuro vía `prefers-color-scheme` y `[data-theme]`.
+Tema **"Esmeralda de joyería"**: esmeralda `#0e9f6e` como color de marca, grafito `#171b22` como
+tinta/fondo (el mismo tono cumple los dos roles según el tema — es texto en claro, es fondo en
+oscuro) y un acento cálido en oro `#d4a24c`. Las 8 categóricas (`--cat-1`..`--cat-8`) no son
+colores sueltos: están derivadas con 45° de separación de matiz entre sí, ancladas en el esmeralda
+y el oro de marca, con la luminosidad ajustada por matiz para que ninguna pese visualmente más que
+las otras en un gráfico. Tipografía (Manrope + JetBrains Mono para cifras) autohospedada como
+archivo estático — la CSP del proyecto no permite cargarla desde una CDN externa. Todo centralizado
+en `src/styles.scss`, con tema claro/oscuro como elección explícita del usuario (`ThemeService` +
+`app-theme-toggle`, persistida en `localStorage`; `prefers-color-scheme` solo define el valor
+inicial).
 
 ### Sistema de componentes de formulario
 
@@ -175,17 +182,18 @@ Clases utilitarias globales en `styles.scss`, sin dependencia de ningún framewo
 | `.picker-backdrop` | Fondo compartido por cualquier panel flotante (popover) |
 | `.swatch-picker` + `.swatch` | Grilla de colores preestablecidos |
 | `.weekday-toggle` + `.weekday-toggle-day` | Chips de día de la semana (reemplaza `<select multiple>`) |
+| `.theme-toggle` + `.theme-toggle-option` | Selector Auto/Claro/Oscuro |
 
 Los controles con popup propio (`SelectField`, `MonthPicker`, `ColorPickerField`) tienen su CSS
 scoped al componente, pero comparten `.picker-backdrop` y los mismos tokens de color/radio que el
 resto. Radio de esquina moderado (8px) en todos los controles — deliberadamente no-píldora,
-coherente con los trazos rectos del isotipo.
+coherente con los trazos rectos del isotipo (por eso el toggle de tema tampoco es un pill).
 
 ---
 
 ## Tecnologías
 
-Angular 21 (standalone, signals) · RxJS · echarts / ngx-echarts · Vitest · TypeScript (`strict`)
+Angular 22 (standalone, signals) · RxJS · echarts / ngx-echarts · Vitest · TypeScript (`strict`)
 
 ---
 
