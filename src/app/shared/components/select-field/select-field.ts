@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 export interface SelectOption {
   value: string;
@@ -9,6 +9,7 @@ export interface SelectOption {
 @Component({
   selector: 'app-select-field',
   templateUrl: './select-field.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './select-field.scss',
 })
 export class SelectField {

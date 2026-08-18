@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ImportsService } from '../../core/services/imports.service';
 import { ImportSummary } from '../../core/models/import-summary.model';
@@ -7,6 +7,7 @@ import { ImportSummary } from '../../core/models/import-summary.model';
   selector: 'app-import-page',
   imports: [],
   templateUrl: './import-page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './import-page.scss',
 })
 export class ImportPage {

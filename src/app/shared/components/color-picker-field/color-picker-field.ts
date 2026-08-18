@@ -7,6 +7,7 @@ import {
   output,
   signal,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { CATEGORY_COLOR_PRESETS } from '../../../core/constants/category-colors';
@@ -15,6 +16,7 @@ import { Hsv, clamp, hexToHsv, hsvToHex, isValidHex } from '../../../core/utils/
 @Component({
   selector: 'app-color-picker-field',
   templateUrl: './color-picker-field.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './color-picker-field.scss',
 })
 export class ColorPickerField {

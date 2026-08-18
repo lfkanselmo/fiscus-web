@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -8,6 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-forgot-password-page',
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './forgot-password-page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './forgot-password-page.scss',
 })
 export class ForgotPasswordPage {

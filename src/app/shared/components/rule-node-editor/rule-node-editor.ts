@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { RULE_LEAF_TYPE_OPTIONS } from '../../../core/constants/rule-types';
 import { RuleLeafType, RuleNode } from '../../../core/models/category-rule.model';
@@ -22,6 +22,7 @@ import { WeekdayToggle } from '../weekday-toggle/weekday-toggle';
   selector: 'app-rule-node-editor',
   imports: [SelectField, WeekdayToggle, RuleNodeEditor],
   templateUrl: './rule-node-editor.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './rule-node-editor.scss',
 })
 export class RuleNodeEditor {

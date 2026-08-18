@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
 import { BarChart, LineChart } from 'echarts/charts';
@@ -24,6 +24,7 @@ echarts.use([BarChart, LineChart, GridComponent, TooltipComponent, CanvasRendere
   imports: [NgxEchartsDirective, MonthPicker, BudgetBar],
   providers: [provideEchartsCore({ echarts })],
   templateUrl: './dashboard.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {

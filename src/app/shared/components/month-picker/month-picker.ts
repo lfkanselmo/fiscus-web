@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { MONTH_NAMES_SHORT } from '../../../core/constants/months';
 import {
@@ -10,6 +10,7 @@ import {
 @Component({
   selector: 'app-month-picker',
   templateUrl: './month-picker.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './month-picker.scss',
 })
 export class MonthPicker {

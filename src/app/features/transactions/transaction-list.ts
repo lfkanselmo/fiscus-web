@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { CategoriesService } from '../../core/services/categories.service';
 import { TransactionsService } from '../../core/services/transactions.service';
@@ -12,6 +12,7 @@ import { SelectField, SelectOption } from '../../shared/components/select-field/
   selector: 'app-transaction-list',
   imports: [CentsCurrencyPipe, DatePipe, SelectField],
   templateUrl: './transaction-list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './transaction-list.scss',
 })
 export class TransactionList {

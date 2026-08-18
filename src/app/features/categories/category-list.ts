@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { CATEGORY_COLOR_PRESETS } from '../../core/constants/category-colors';
@@ -15,6 +15,7 @@ const DEFAULT_COLOR: string = CATEGORY_COLOR_PRESETS[0];
   selector: 'app-category-list',
   imports: [ReactiveFormsModule, ColorPickerField, CategoryRulesPanel],
   templateUrl: './category-list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './category-list.scss',
 })
 export class CategoryList {

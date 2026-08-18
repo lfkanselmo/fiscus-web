@@ -1,4 +1,13 @@
-import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { RULE_LEAF_TYPE_OPTIONS } from '../../../../core/constants/rule-types';
 import { CategoryRule, RuleLeafType, RuleNode } from '../../../../core/models/category-rule.model';
@@ -15,6 +24,7 @@ import { SelectField } from '../../../../shared/components/select-field/select-f
   selector: 'app-rule-card',
   imports: [RuleNodeEditor, SelectField],
   templateUrl: './rule-card.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './rule-card.scss',
 })
 export class RuleCard {

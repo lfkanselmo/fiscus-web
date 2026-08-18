@@ -1,10 +1,11 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { WEEKDAY_LABELS_SHORT } from '../../../core/constants/weekdays';
 
 @Component({
   selector: 'app-weekday-toggle',
   templateUrl: './weekday-toggle.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './weekday-toggle.scss',
 })
 export class WeekdayToggle {

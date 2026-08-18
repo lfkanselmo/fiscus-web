@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -23,6 +23,7 @@ function passwordsMatchValidator(): ValidatorFn {
   selector: 'app-register-page',
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register-page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './register-page.scss',
 })
 export class RegisterPage {

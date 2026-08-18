@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { BudgetStatus } from '../../../core/models/budget-status.model';
 import { budgetBarWidthPercent, isOverBudget } from '../../../core/utils/budget';
@@ -7,6 +7,7 @@ import { formatCents } from '../../../core/utils/currency';
 @Component({
   selector: 'app-budget-bar',
   templateUrl: './budget-bar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './budget-bar.scss',
 })
 export class BudgetBar {

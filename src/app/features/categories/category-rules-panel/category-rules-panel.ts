@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, effect, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { CategoryRule } from '../../../core/models/category-rule.model';
 import { CategoryRulesService } from '../../../core/services/category-rules.service';
@@ -8,6 +8,7 @@ import { RuleCard } from './rule-card/rule-card';
   selector: 'app-category-rules-panel',
   imports: [RuleCard],
   templateUrl: './category-rules-panel.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './category-rules-panel.scss',
 })
 export class CategoryRulesPanel {

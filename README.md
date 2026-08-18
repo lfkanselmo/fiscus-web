@@ -18,7 +18,7 @@ _(pendiente — agregar screenshot o GIF del dashboard, import y flujo de reglas
 
 ## Requisitos
 
-- Node.js 20+
+- Node.js 22+
 - `fiscus-api` corriendo en `http://localhost:8000` (ver su README)
 
 ---
